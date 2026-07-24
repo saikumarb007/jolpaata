@@ -1,30 +1,33 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:jolpaata/main.dart';
+import 'package:jolpaata/core/models/lullaby.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  test('Lullaby.fromJson parses a catalogue entry', () {
+    final l = Lullaby.fromJson(const {
+      'id': 'jo-001',
+      'title': 'Chandamama Raave',
+      'titleTelugu': 'చందమామ రావే',
+      'artist': 'Traditional',
+      'durationSeconds': 180,
+      'audioAsset': 'assets/audio/telugu/chandamama_raave.mp3',
+      'lyricsAsset': 'assets/lyrics/chandamama_raave.txt',
+      'tags': ['classic', 'moon'],
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(l.id, 'jo-001');
+    expect(l.titleTelugu, 'చందమామ రావే');
+    expect(l.tags, ['classic', 'moon']);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  test('Lullaby.fromJson tolerates missing optional fields', () {
+    final l = Lullaby.fromJson(const {
+      'id': 'jo-002',
+      'title': 'Untitled',
+      'audioAsset': 'assets/audio/telugu/x.mp3',
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(l.artist, '');
+    expect(l.durationSeconds, 0);
+    expect(l.tags, isEmpty);
   });
 }
