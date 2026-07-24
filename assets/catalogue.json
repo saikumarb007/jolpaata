@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "lullabies": [
+    {
+      "id": "jo-001",
+      "title": "Chandamama Raave",
+      "titleTelugu": "చందమామ రావే",
+      "artist": "Traditional",
+      "durationSeconds": 180,
+      "audioAsset": "assets/audio/telugu/chandamama_raave.mp3",
+      "lyricsAsset": "assets/lyrics/chandamama_raave.txt",
+      "tags": ["classic", "moon"]
+    },
+    {
+      "id": "jo-002",
+      "title": "Jo Achyutananda",
+      "titleTelugu": "జో అచ్యుతానంద",
+      "artist": "Annamacharya",
+      "durationSeconds": 210,
+      "audioAsset": "assets/audio/telugu/jo_achyutananda.mp3",
+      "lyricsAsset": "assets/lyrics/jo_achyutananda.txt",
+      "tags": ["devotional", "krishna"]
+    }
+  ]
+}
