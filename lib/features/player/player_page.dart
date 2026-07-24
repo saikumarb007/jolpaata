@@ -68,7 +68,7 @@ class _PlayerPageState extends State<PlayerPage> {
             l.titleTelugu.isNotEmpty ? l.titleTelugu : l.title,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
-          Text(l.artist),
+          Text(l.composer),
           if (_error != null)
             Padding(
               padding: const EdgeInsets.all(8),
@@ -88,7 +88,7 @@ class _PlayerPageState extends State<PlayerPage> {
               },
             ),
           const Divider(),
-          Expanded(child: _LyricsView(future: _lyrics())),
+          Expanded(child: _LyricsView(future: _lyrics(), lullaby: l)),
         ],
       ),
     );
@@ -96,24 +96,44 @@ class _PlayerPageState extends State<PlayerPage> {
 }
 
 class _LyricsView extends StatelessWidget {
-  const _LyricsView({required this.future});
+  const _LyricsView({required this.future, required this.lullaby});
 
   final Future<String> future;
+  final Lullaby lullaby;
 
   @override
   Widget build(BuildContext context) {
+    final body = Theme.of(context).textTheme.titleMedium?.copyWith(height: 1.7);
     return FutureBuilder<String>(
       future: future,
       builder: (context, snap) {
-        final text = snap.data ?? '';
-        if (text.trim().isEmpty) {
-          return const Center(child: Text('Lyrics not added yet'));
-        }
+        final full = (snap.data ?? '').trim();
+        // Full lyrics file present → show it. Otherwise fall back to the
+        // catalogue's first_line so there's always real content on screen.
         return SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(height: 1.6),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                full.isNotEmpty ? full : lullaby.firstLine,
+                textAlign: TextAlign.center,
+                style: body,
+              ),
+              if (full.isEmpty) ...[
+                const SizedBox(height: 24),
+                Text(
+                  lullaby.description,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Full lyrics coming soon',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+              ],
+            ],
           ),
         );
       },

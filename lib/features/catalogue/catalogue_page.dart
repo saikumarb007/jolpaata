@@ -55,7 +55,7 @@ class LullabyList extends StatelessWidget {
         return ListTile(
           leading: const Icon(Icons.music_note),
           title: Text(l.titleTelugu.isNotEmpty ? l.titleTelugu : l.title),
-          subtitle: Text(l.artist),
+          subtitle: Text(l.composer),
           trailing: BlocBuilder<FavouritesCubit, Set<String>>(
             builder: (context, favs) => IconButton(
               icon: Icon(
