@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:just_audio/just_audio.dart';
@@ -39,12 +41,21 @@ class _PlayerPageState extends State<PlayerPage> {
     }
   }
 
-  // Lyrics are a bundled text asset — public-domain traditional verses, offline.
-  Future<String> _lyrics() async {
+  // Lyrics are a bundled JSON asset:
+  //   { "lines": [...telugu...], "complete": true|false }
+  // Public-domain traditional verses, offline. Returns the joined text plus the
+  // `complete` flag; when the file is missing the text is empty and the view
+  // falls back to the catalogue's first_line.
+  Future<(String, bool)> _lyrics() async {
     try {
-      return await rootBundle.loadString(widget.lullaby.lyricsAsset);
+      final raw = await rootBundle.loadString(widget.lullaby.lyricsAsset);
+      final json = jsonDecode(raw) as Map<String, dynamic>;
+      final lines = (json['lines'] as List<dynamic>? ?? const [])
+          .map((e) => e.toString())
+          .toList();
+      return (lines.join('\n'), json['complete'] as bool? ?? false);
     } catch (_) {
-      return '';
+      return ('', false);
     }
   }
 
@@ -98,29 +109,26 @@ class _PlayerPageState extends State<PlayerPage> {
 class _LyricsView extends StatelessWidget {
   const _LyricsView({required this.future, required this.lullaby});
 
-  final Future<String> future;
+  final Future<(String, bool)> future;
   final Lullaby lullaby;
 
   @override
   Widget build(BuildContext context) {
     final body = Theme.of(context).textTheme.titleMedium?.copyWith(height: 1.7);
-    return FutureBuilder<String>(
+    return FutureBuilder<(String, bool)>(
       future: future,
       builder: (context, snap) {
-        final full = (snap.data ?? '').trim();
-        // Full lyrics file present → show it. Otherwise fall back to the
-        // catalogue's first_line so there's always real content on screen.
+        final (text, complete) = snap.data ?? ('', false);
+        final shown = text.trim().isNotEmpty ? text : lullaby.firstLine;
         return SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                full.isNotEmpty ? full : lullaby.firstLine,
-                textAlign: TextAlign.center,
-                style: body,
-              ),
-              if (full.isEmpty) ...[
+              Text(shown, textAlign: TextAlign.center, style: body),
+              // Partial (only the opening line) until someone finishes the file
+              // and sets "complete": true.
+              if (!complete) ...[
                 const SizedBox(height: 24),
                 Text(
                   lullaby.description,
