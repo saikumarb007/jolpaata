@@ -6,7 +6,7 @@
       "title": "Chandamama Raave",
       "titleTelugu": "చందమామ రావే",
       "artist": "Traditional",
-      "durationSeconds": 180,
+      "durationSeconds": 0,
       "audioAsset": "assets/audio/telugu/chandamama_raave.mp3",
       "lyricsAsset": "assets/lyrics/chandamama_raave.txt",
       "tags": ["classic", "moon"]
@@ -16,10 +16,30 @@
       "title": "Jo Achyutananda",
       "titleTelugu": "జో అచ్యుతానంద",
       "artist": "Annamacharya",
-      "durationSeconds": 210,
+      "durationSeconds": 0,
       "audioAsset": "assets/audio/telugu/jo_achyutananda.mp3",
       "lyricsAsset": "assets/lyrics/jo_achyutananda.txt",
       "tags": ["devotional", "krishna"]
+    },
+    {
+      "id": "jo-003",
+      "title": "Rama Laali Megha Shyama Laali",
+      "titleTelugu": "రామ లాలి మేఘశ్యామ లాలి",
+      "artist": "Traditional",
+      "durationSeconds": 0,
+      "audioAsset": "assets/audio/telugu/rama_laali.mp3",
+      "lyricsAsset": "assets/lyrics/rama_laali.txt",
+      "tags": ["laali", "rama"]
+    },
+    {
+      "id": "jo-004",
+      "title": "Jo Jo Jo Jo",
+      "titleTelugu": "జో జో జో జో",
+      "artist": "Traditional",
+      "durationSeconds": 0,
+      "audioAsset": "assets/audio/telugu/jo_jo_jo_jo.mp3",
+      "lyricsAsset": "assets/lyrics/jo_jo_jo_jo.txt",
+      "tags": ["laali"]
     }
   ]
 }
